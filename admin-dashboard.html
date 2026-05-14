@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Attendance Portal</title>
+  <link rel="stylesheet" href="attendance.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Admin Dashboard</p>
+      <h1>Attendance Control</h1>
+    </div>
+    <a href="login.html" class="secondary-btn">Logout</a>
+  </header>
+
+  <main class="page-grid">
+    <section class="content-card wide">
+      <div class="section-title">
+        <div>
+          <p class="eyebrow">Students</p>
+          <h2>Student List</h2>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Roll No.</th>
+              <th>Name</th>
+              <th>Class</th>
+              <th>Attendance</th>
+            </tr>
+          </thead>
+          <tbody id="studentListTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="content-card wide">
+      <div class="section-title">
+        <div>
+          <p class="eyebrow">Mark</p>
+          <h2>Mark Attendance</h2>
+        </div>
+      </div>
+      <form id="markAttendanceForm" class="mark-form">
+        <div>
+          <label for="attendanceDate">Date</label>
+          <input id="attendanceDate" type="date" required>
+        </div>
+        <div>
+          <label for="studentSelect">Student</label>
+          <select id="studentSelect" required></select>
+        </div>
+        <div>
+          <label for="attendanceStatus">Status</label>
+          <select id="attendanceStatus" required>
+            <option value="Present">Present</option>
+            <option value="Absent">Absent</option>
+          </select>
+        </div>
+        <button type="submit" class="primary-btn">Save Attendance</button>
+      </form>
+      <p class="success-text" id="attendanceMessage" aria-live="polite"></p>
+    </section>
+
+    <section class="content-card">
+      <div class="section-title">
+        <div>
+          <p class="eyebrow">Requests</p>
+          <h2>Leave Requests</h2>
+        </div>
+      </div>
+      <div id="adminLeaveList" class="status-list"></div>
+    </section>
+
+    <section class="content-card">
+      <div class="section-title">
+        <div>
+          <p class="eyebrow">Messages</p>
+          <h2>Student Feedback</h2>
+        </div>
+      </div>
+      <div id="feedbackList" class="status-list"></div>
+    </section>
+  </main>
+
+  <script src="attendance.js"></script>
+</body>
+</html>

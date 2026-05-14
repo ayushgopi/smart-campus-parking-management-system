@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Smart Campus Parking{% endblock %}
+{% block content %}
+<section
+    class="page-header dashboard-hero"
+    data-total-slots="{{ stats.total_slots }}"
+    data-available-slots="{{ stats.available_slots }}"
+    data-occupied-slots="{{ stats.occupied_slots }}"
+    data-total-vehicles="{{ stats.total_vehicles }}"
+>
+    <div>
+        <span class="eyebrow">{{ "Admin Dashboard" if session.role == "admin" else "User Dashboard" }}</span>
+        <h1>Parking command center</h1>
+        <p class="muted">
+            {% if session.role == "admin" %}
+            Monitor occupancy, flow, inventory, and user activity from a premium operations layer.
+            {% else %}
+            Register vehicles, allocate available slots, and track your campus parking movement.
+            {% endif %}
+        </p>
+    </div>
+    <div class="header-badge">
+        <strong>{{ stats.available_slots }}</strong>
+        <span>Slots Available Now</span>
+    </div>
+</section>
+
+<section class="stats-grid">
+    <article class="stat-card stat-blue">
+        <div class="stat-icon">V</div>
+        <span>Total Vehicles</span>
+        <strong data-count="{{ stats.total_vehicles }}">{{ stats.total_vehicles }}</strong>
+    </article>
+    <article class="stat-card stat-blue">
+        <div class="stat-icon">S</div>
+        <span>Total Slots</span>
+        <strong data-count="{{ stats.total_slots }}">{{ stats.total_slots }}</strong>
+    </article>
+    <article class="stat-card stat-green">
+        <div class="stat-icon">A</div>
+        <span>Available Slots</span>
+        <strong data-count="{{ stats.available_slots }}">{{ stats.available_slots }}</strong>
+    </article>
+    <article class="stat-card stat-red">
+        <div class="stat-icon">O</div>
+        <span>Occupied Slots</span>
+        <strong data-count="{{ stats.occupied_slots }}">{{ stats.occupied_slots }}</strong>
+    </article>
+</section>
+
+<section class="analytics-grid">
+    <article class="panel visualization-panel">
+        <div class="panel-head">
+            <h2>3D Parking Visualization</h2>
+            <span class="role-pill">Live model</span>
+        </div>
+        <canvas id="parking-visual" data-mode="dashboard"></canvas>
+    </article>
+
+    <article class="panel chart-panel">
+        <div class="panel-head">
+            <h2>Occupancy Analytics</h2>
+            <span class="role-pill">Animated chart</span>
+        </div>
+        <canvas id="occupancy-chart"></canvas>
+    </article>
+</section>
+
+<section class="content-grid">
+    <article class="panel">
+        <div class="panel-head">
+            <h2>Currently Parked</h2>
+            <a href="{{ url_for('allocation') }}">Manage</a>
+        </div>
+        {% if stats.active_parking %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vehicle</th>
+                        <th>Owner</th>
+                        <th>Slot</th>
+                        <th>Entry Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in stats.active_parking %}
+                    <tr>
+                        <td>{{ row.vehicle_number }} <span class="table-meta">{{ row.vehicle_type }}</span></td>
+                        <td>{{ row.owner_name }}</td>
+                        <td>{{ row.slot_number }} <span class="table-meta">{{ row.slot_type }}</span></td>
+                        <td>{{ row.entry_time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty-state">No vehicles are currently parked.</p>
+        {% endif %}
+    </article>
+
+    <article class="panel">
+        <div class="panel-head">
+            <h2>Live Activity Feed</h2>
+            <a href="{{ url_for('history') }}">View all</a>
+        </div>
+        {% if stats.recent_history %}
+        <div class="activity-list live-feed">
+            {% for row in stats.recent_history %}
+            <div class="activity-item">
+                <div>
+                    <strong>{{ row.vehicle_number }}</strong>
+                    <p>{{ row.owner_name }} | {{ row.slot_number }}</p>
+                </div>
+                <span>{{ row.exit_time if row.exit_time else "Active" }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-state">Parking activity will appear here once operations begin.</p>
+        {% endif %}
+    </article>
+</section>
+
+{% if session.role == "admin" %}
+<section class="panel">
+    <div class="panel-head">
+        <h2>Admin Controls</h2>
+        <span class="role-pill">Full access</span>
+    </div>
+    <div class="admin-actions">
+        <a class="quick-card" href="{{ url_for('vehicles') }}">
+            <span class="quick-icon">V</span>
+            <strong>Delete or review vehicles</strong>
+            <span>Manage registrations and enforce cleanup rules.</span>
+        </a>
+        <a class="quick-card" href="{{ url_for('slots') }}">
+            <span class="quick-icon">S</span>
+            <strong>Create and remove slots</strong>
+            <span>Keep parking capacity aligned with campus demand.</span>
+        </a>
+        <a class="quick-card" href="{{ url_for('history') }}">
+            <span class="quick-icon">H</span>
+            <strong>Audit parking records</strong>
+            <span>Review entry and exit timelines from the latest activity.</span>
+        </a>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

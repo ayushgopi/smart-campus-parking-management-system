@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Vehicles | Smart Campus Parking{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div>
+        <span class="eyebrow">Vehicle Registration</span>
+        <h1>Manage campus vehicles</h1>
+        <p class="muted">
+            {% if session.role == "admin" %}
+            Review every registered vehicle across campus and remove records when needed.
+            {% else %}
+            Register and view only the vehicles connected to your account.
+            {% endif %}
+        </p>
+    </div>
+    <div class="header-badge">
+        <strong>{{ vehicles|length }}</strong>
+        <span>Registered Vehicles</span>
+    </div>
+</section>
+
+<section class="content-grid">
+    <article class="panel">
+        <div class="panel-head">
+            <h2>Add Vehicle</h2>
+            <span class="role-pill">Available to all users</span>
+        </div>
+        <form method="post" class="form-grid">
+            <label>
+                Vehicle Number
+                <input type="text" name="vehicle_number" placeholder="e.g. KA01AB1234" required>
+            </label>
+            <label>
+                Owner Name
+                <input type="text" name="owner_name" placeholder="Enter owner name" required>
+            </label>
+            <label>
+                Vehicle Type
+                <select name="vehicle_type" required>
+                    <option value="">Select type</option>
+                    <option value="Car">Car</option>
+                    <option value="Bike">Bike</option>
+                </select>
+            </label>
+            <button class="btn btn-primary" type="submit">Register Vehicle</button>
+        </form>
+    </article>
+
+    <article class="panel">
+        <div class="panel-head">
+            <h2>Vehicle Directory</h2>
+            <span class="role-pill">{{ session.role|title }} view</span>
+        </div>
+        {% if vehicles %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vehicle Number</th>
+                        <th>Owner</th>
+                        {% if session.role == "admin" %}
+                        <th>Account</th>
+                        {% endif %}
+                        <th>Type</th>
+                        <th>Status</th>
+                        {% if session.role == "admin" %}
+                        <th>Action</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vehicle in vehicles %}
+                    <tr>
+                        <td>{{ vehicle.vehicle_number }}</td>
+                        <td>{{ vehicle.owner_name }}</td>
+                        {% if session.role == "admin" %}
+                        <td>{{ vehicle.account_username or "Unassigned" }}</td>
+                        {% endif %}
+                        <td>{{ vehicle.vehicle_type }}</td>
+                        <td>
+                            {% if vehicle.id in active_vehicle_ids %}
+                            <span class="status-badge occupied">Parked</span>
+                            {% else %}
+                            <span class="status-badge available">Ready</span>
+                            {% endif %}
+                        </td>
+                        {% if session.role == "admin" %}
+                        <td>
+                            <form method="post" action="{{ url_for('delete_vehicle', vehicle_id=vehicle.id) }}">
+                                <button class="btn btn-danger" type="submit">Delete</button>
+                            </form>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty-state">No vehicles registered yet.</p>
+        {% endif %}
+    </article>
+</section>
+{% endblock %}

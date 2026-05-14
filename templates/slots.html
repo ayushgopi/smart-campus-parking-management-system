@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Slots | Smart Campus Parking{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div>
+        <span class="eyebrow">Parking Slots</span>
+        <h1>Manage slot inventory</h1>
+        <p class="muted">Visualize every parking slot, keep availability up to date, and let admins maintain the slot inventory securely.</p>
+    </div>
+    <div class="header-badge">
+        <strong>{{ slots|length }}</strong>
+        <span>Total Slots</span>
+    </div>
+</section>
+
+<section class="content-grid">
+    {% if session.role == "admin" %}
+    <article class="panel">
+        <div class="panel-head">
+            <h2>Add Slot</h2>
+            <span class="role-pill">Admin only</span>
+        </div>
+        <form method="post" class="form-grid">
+            <label>
+                Slot Number
+                <input type="text" name="slot_number" placeholder="e.g. C-101" required>
+            </label>
+            <label>
+                Slot Type
+                <select name="slot_type" required>
+                    <option value="">Select type</option>
+                    <option value="Car">Car</option>
+                    <option value="Bike">Bike</option>
+                </select>
+            </label>
+            <button class="btn btn-primary" type="submit">Add Slot</button>
+        </form>
+    </article>
+    {% endif %}
+
+    <article class="panel {% if session.role != 'admin' %}panel-full{% endif %}">
+        <div class="panel-head">
+            <h2>Slot Grid</h2>
+            <span class="role-pill">Live status</span>
+        </div>
+        {% if slots %}
+        <div class="slot-grid">
+            {% for slot in slots %}
+            <div class="slot-card {{ 'occupied' if slot.status == 'Occupied' else 'available' }}" data-slot-status="{{ slot.status }}">
+                <div class="slot-topline">
+                    <span class="slot-dot"></span>
+                    <span>{{ slot.status }}</span>
+                </div>
+                <strong>{{ slot.slot_number }}</strong>
+                <p>{{ slot.slot_type }} Parking</p>
+                {% if session.role == "admin" %}
+                <form method="post" action="{{ url_for('delete_slot', slot_id=slot.id) }}">
+                    <button class="btn btn-ghost" type="submit">Delete</button>
+                </form>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-state">No parking slots created yet.</p>
+        {% endif %}
+    </article>
+</section>
+{% endblock %}

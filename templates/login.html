@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Login | Smart Campus Parking{% endblock %}
+{% block content %}
+<section class="landing-hero">
+    <div class="hero-copy">
+        <span class="eyebrow">Campus Mobility Cloud</span>
+        <h1>Smart parking intelligence for modern campuses.</h1>
+        <p>Register vehicles, allocate live slots, monitor exits, and understand occupancy from one futuristic command center.</p>
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="{{ url_for('register') }}">Create Account</a>
+            <a class="btn btn-secondary" href="#signin">Admin Login</a>
+        </div>
+        <div class="hero-metrics">
+            <div><strong>Live</strong><span>Slot visibility</span></div>
+            <div><strong>RBAC</strong><span>Admin security</span></div>
+            <div><strong>24/7</strong><span>Parking history</span></div>
+        </div>
+    </div>
+
+    <div class="hero-visual">
+        <canvas id="parking-visual" data-mode="landing"></canvas>
+        <div class="visual-card visual-card-top">
+            <span>Occupancy AI</span>
+            <strong>68%</strong>
+        </div>
+        <div class="visual-card visual-card-bottom">
+            <span>Available bays</span>
+            <strong>Realtime</strong>
+        </div>
+    </div>
+</section>
+
+<section class="landing-strip">
+    <article>
+        <span>01</span>
+        <strong>Vehicle registry</strong>
+        <p>Owner-linked records with duplicate prevention.</p>
+    </article>
+    <article>
+        <span>02</span>
+        <strong>Slot orchestration</strong>
+        <p>Animated availability view for cars and bikes.</p>
+    </article>
+    <article>
+        <span>03</span>
+        <strong>Activity timeline</strong>
+        <p>Entry and exit history for campus movement.</p>
+    </article>
+</section>
+
+<section class="auth-layout" id="signin">
+    <div class="form-card auth-panel">
+        <h2>Welcome back</h2>
+        <p class="muted">Sign in to access your parking workspace.</p>
+        <form method="post" class="form-grid">
+            <label>
+                Username
+                <input type="text" name="username" placeholder="Enter username" required>
+            </label>
+            <label>
+                Password
+                <input type="password" name="password" placeholder="Enter password" required>
+            </label>
+            <button class="btn btn-primary" type="submit">Login</button>
+        </form>
+        <p class="form-footer">New here? <a href="{{ url_for('register') }}">Create an account</a></p>
+    </div>
+</section>
+{% endblock %}

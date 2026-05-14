@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Register | Smart Campus Parking{% endblock %}
+{% block content %}
+<section class="auth-layout">
+    <div class="hero-card accent-alt">
+        <span class="eyebrow">Access Control</span>
+        <h1>Create a secure campus parking account.</h1>
+        <p>Create a standard user account, keep credentials strong, and start managing your vehicles and parking activity with confidence.</p>
+        <div class="hero-points">
+            <div class="stat-chip">Password validation</div>
+            <div class="stat-chip">Duplicate username protection</div>
+            <div class="stat-chip">Secure user access</div>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <h2>Create account</h2>
+        <p class="muted">New accounts are created as standard users.</p>
+        <form method="post" class="form-grid">
+            <label>
+                Username
+                <input type="text" name="username" placeholder="Choose a username" required>
+            </label>
+            <label>
+                Password
+                <input type="password" name="password" placeholder="Minimum 6 characters" required>
+            </label>
+            <button class="btn btn-primary" type="submit">Register</button>
+        </form>
+        <p class="form-footer">Already have an account? <a href="{{ url_for('login') }}">Back to login</a></p>
+    </div>
+</section>
+{% endblock %}

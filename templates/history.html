@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}History | Smart Campus Parking{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div>
+        <span class="eyebrow">Parking History</span>
+        <h1>Track entry and exit activity</h1>
+        <p class="muted">Review the latest parking movement across campus with entry times, exit times, and slot usage in one table.</p>
+    </div>
+    <div class="header-badge">
+        <strong>{{ history|length }}</strong>
+        <span>Total Records</span>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-head">
+        <h2>Parking Log</h2>
+        <span class="role-pill">Latest first</span>
+    </div>
+    {% if history %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Vehicle Number</th>
+                    <th>Owner</th>
+                    <th>Type</th>
+                    <th>Slot</th>
+                    <th>Entry Time</th>
+                    <th>Exit Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in history %}
+                <tr>
+                    <td>{{ row.vehicle_number }}</td>
+                    <td>{{ row.owner_name }}</td>
+                    <td>{{ row.vehicle_type }}</td>
+                    <td>{{ row.slot_number }} <span class="table-meta">{{ row.slot_type }}</span></td>
+                    <td>{{ row.entry_time }}</td>
+                    <td>{{ row.exit_time if row.exit_time else 'Still Parked' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="empty-state">No parking history available yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

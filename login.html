@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Student Attendance</title>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="stylesheet" href="attendance.css">
+</head>
+<body class="login-page">
+  <main class="auth-shell">
+    <section class="auth-panel">
+      <div>
+        <p class="eyebrow">Attendance Portal</p>
+        <h1>Welcome back</h1>
+        <p class="muted">Sign in to manage attendance, leave requests, and feedback.</p>
+      </div>
+
+      <form class="form-card" id="loginForm">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" placeholder="Enter username" required>
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Enter password" required>
+
+        <label for="role">Role</label>
+        <select id="role" name="role" required>
+          <option value="student">Student</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <button type="submit" class="primary-btn">Login</button>
+        <p class="form-note">Use any username and password for this frontend demo.</p>
+      </form>
+    </section>
+
+    <section class="auth-visual" aria-label="Students walking on campus">
+      <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=80" alt="Students studying together on campus">
+      <div class="visual-caption">
+        <strong>Track every day clearly.</strong>
+        <span>Attendance, leave, and feedback in one simple workspace.</span>
+      </div>
+    </section>
+  </main>
+
+  <script src="attendance.js"></script>
+</body>
+</html>

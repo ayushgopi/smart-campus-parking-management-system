@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Allocation | Smart Campus Parking{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div>
+        <span class="eyebrow">Slot Allocation</span>
+        <h1>Assign and release parking slots</h1>
+        <p class="muted">
+            {% if session.role == "admin" %}
+            Allocate any campus vehicle, prevent invalid assignments, and record exits with automatic slot recovery.
+            {% else %}
+            Allocate only your registered vehicles, prevent invalid assignments, and record exits with automatic slot recovery.
+            {% endif %}
+        </p>
+    </div>
+    <div class="header-badge">
+        <strong>{{ active_allocations|length }}</strong>
+        <span>Active Allocations</span>
+    </div>
+</section>
+
+<section class="content-grid">
+    <article class="panel">
+        <div class="panel-head">
+            <h2>New Allocation</h2>
+            <span class="role-pill">{{ "All vehicles" if session.role == "admin" else "Your vehicles only" }}</span>
+        </div>
+        <form method="post" class="form-grid">
+            <label>
+                Vehicle
+                <select name="vehicle_id" required>
+                    <option value="">Select vehicle</option>
+                    {% for vehicle in vehicles %}
+                    <option value="{{ vehicle.id }}">{{ vehicle.vehicle_number }} • {{ vehicle.owner_name }} • {{ vehicle.vehicle_type }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>
+                Available Slot
+                <select name="slot_id" required>
+                    <option value="">Select slot</option>
+                    {% for slot in slots %}
+                    <option value="{{ slot.id }}">{{ slot.slot_number }} • {{ slot.slot_type }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <button class="btn btn-primary" type="submit">Allocate Slot</button>
+        </form>
+    </article>
+
+    <article class="panel">
+        <div class="panel-head">
+            <h2>Currently Parked</h2>
+            <span class="role-pill">Exit actions enabled</span>
+        </div>
+        {% if active_allocations %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vehicle</th>
+                        <th>Owner</th>
+                        <th>Slot</th>
+                        <th>Entry Time</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in active_allocations %}
+                    <tr>
+                        <td>{{ row.vehicle_number }} <span class="table-meta">{{ row.vehicle_type }}</span></td>
+                        <td>{{ row.owner_name }}</td>
+                        <td>{{ row.slot_number }} <span class="table-meta">{{ row.slot_type }}</span></td>
+                        <td>{{ row.entry_time }}</td>
+                        <td>
+                            <form method="post" action="{{ url_for('record_exit', parking_id=row.id) }}">
+                                <button class="btn btn-secondary" type="submit">Record Exit</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty-state">No active allocations right now.</p>
+        {% endif %}
+    </article>
+</section>
+{% endblock %}
