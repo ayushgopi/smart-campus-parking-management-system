@@ -20,7 +20,9 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.path.join(BASE_DIR, "parking.db")
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "smart-campus-secret-key"
+app.config["SECRET_KEY"] = os.environ.get(
+    "SECRET_KEY", "smart-campus-dev-secret-key"
+)
 app.config["DATABASE"] = DATABASE
 app.config["MIN_PASSWORD_LENGTH"] = 6
 app.config["PASSWORD_HASH_METHOD"] = "pbkdf2:sha256"
@@ -622,4 +624,5 @@ with app.app_context():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
